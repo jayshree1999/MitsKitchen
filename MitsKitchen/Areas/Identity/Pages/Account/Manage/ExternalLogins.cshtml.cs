@@ -6,17 +6,18 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MitsKitchen.Models;
 
 namespace MitsKitchen.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<MyIdentityUser> _userManager;
+        private readonly SignInManager<MyIdentityUser> _signInManager;
 
         public ExternalLoginsModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<MyIdentityUser> userManager,
+            SignInManager<MyIdentityUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -86,7 +87,7 @@ namespace MitsKitchen.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID 'user.Id'.");
             }
 
-            var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
+            var info = await _signInManager.GetExternalLoginInfoAsync(user.Id.ToString());
             if (info == null)
             {
                 throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");

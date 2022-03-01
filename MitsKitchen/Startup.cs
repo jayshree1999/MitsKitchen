@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MitsKitchen.Data;
+using MitsKitchen.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,34 @@ namespace MitsKitchen
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            // services.AddDefaultIdentity<MyIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            services.AddIdentity<MyIdentityUser, MyIdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 8;
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+                {
+                    options.LoginPath = "/Identity/Account/Login";
+                    options.LogoutPath = "/Identity/Account/Logout";
+                    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    options.SlidingExpiration = true;
+                });
+
+
+           services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +87,8 @@ namespace MitsKitchen
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(name: "default",
+                    pattern: " { Areas:exist}/{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

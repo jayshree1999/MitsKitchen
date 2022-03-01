@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MitsKitchen.Data;
+using MitsKitchen.Models;
 
 [assembly: HostingStartup(typeof(MitsKitchen.Areas.Identity.IdentityHostingStartup))]
 namespace MitsKitchen.Areas.Identity
@@ -19,7 +20,7 @@ namespace MitsKitchen.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("ApplicationDbContextConnection")));
 
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                services.AddDefaultIdentity<MyIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<ApplicationDbContext>();
             });
         }
