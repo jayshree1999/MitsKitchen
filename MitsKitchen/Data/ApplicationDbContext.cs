@@ -21,5 +21,12 @@ namespace MitsKitchen.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<MitsKitchen.Models.Category> Category { get; set; }
+
+        public DbSet<MitsKitchen.Models.Product> Product { get; set; }
+
+       
+       
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -61,6 +62,22 @@ namespace MitsKitchen.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name="Display Name")]
+            [Required]
+            [StringLength(60,ErrorMessage ="{0} cannot have more than {1} characters")]
+            public string DisplayName { get; set; }
+
+            [Display(Name = "Date of birth")]
+            [PersonalData]
+            [Required]
+            [Column(TypeName = "smalldatetime")]
+            public DateTime DateOfBirth { get; set; }
+
+
+            [Display(Name ="Is this and Admin User?")]
+            [Required]
+            public bool IsAdminUser { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -75,7 +92,13 @@ namespace MitsKitchen.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new MyIdentityUser { UserName = Input.Email, Email = Input.Email };
+                var user = new MyIdentityUser {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    DisplayName=Input.DisplayName,
+                    DateOfBirth=Input.DateOfBirth,
+                    IsAdminUser=Input.IsAdminUser
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

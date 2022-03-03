@@ -15,14 +15,14 @@ namespace MitsKitchen.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
-                services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("ApplicationDbContextConnection")));
+          //  builder.ConfigureServices((context, services) => {
+            //    services.AddDbContext<ApplicationDbContext>(options =>
+             //       options.UseSqlServer(
+                  //      context.Configuration.GetConnectionString("DefaultConnection")));
 
-                services.AddDefaultIdentity<MyIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
-            });
+               // services.AddDefaultIdentity<MyIdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    //.AddEntityFrameworkStores<ApplicationDbContext>();
+           // });
         }
     }
 }
